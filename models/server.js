@@ -6,12 +6,14 @@ const {dbConnection} = require('../database/config');
 class Server{
 
     constructor(){
-        this.app = express();
-        this.port= process.env.PORT;
-        this.userPath = '/api/users';
-        this.emotionPath= '/api/emotions';
-        this.testPath = '/api/tests';
+        this.app            = express();
+        this.port           = process.env.PORT;
+        this.userPath       = '/api/users';
+        this.emotionPath    = '/api/emotions';
+        this.testPath       = '/api/tests';
         this.pictogramaPath = '/api/pictogramas';
+        this.authPath       = '/api/auth';
+
 
         // Conectar a la DB
         this.conectarDB();
@@ -49,10 +51,12 @@ class Server{
 
     routes() {
 
+        this.app.use(this.authPath, require('../routes/auth'));
         this.app.use(this.userPath, require('../routes/user'));
         this.app.use(this.emotionPath, require('../routes/emotion'));
         this.app.use(this.testPath, require('../routes/test'));
         this.app.use(this.pictogramaPath, require('../routes/pictograma'));
+
 
     }
 
