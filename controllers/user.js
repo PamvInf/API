@@ -2,6 +2,7 @@ const { response } = require('express');
 const bcryptjs = require('bcryptjs');
 
 const Usuario = require('../models/users');
+const  jwt  = require('jsonwebtoken');
 
 
 const usersGet = (req,res = response ) => {
@@ -54,10 +55,12 @@ const usersDelete = async(req, res = response) => {
 
     const { id } = req.params;
 
-    // Fisicamente lo borramos
+    // Si quisieramos fisicamente
     // const usuario = await Usuario.findByIdAndDelete( id );
 
     const usuario = await Usuario.findByIdAndUpdate( id, { estado: false } );
+
+   
 
 
     res.json(usuario);

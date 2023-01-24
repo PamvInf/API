@@ -1,5 +1,11 @@
 const {Router} = require('express');
-const { usersGet, usersPost, usersPut, usersDelete, usersPatch } = require('../controllers/user');
+
+const {validarJWT} = require('../middlewares/validar-jwt');
+const { usersGet,
+        usersPost,
+        usersPut,
+        usersDelete,
+        usersPatch } = require('../controllers/user');
 
 const router = Router ();
 
@@ -12,7 +18,9 @@ router.put('/',usersPut);
 
 router.post('/',usersPost);
 
-router.delete('/',usersDelete);
+router.delete('/:id',[
+    validarJWT
+],usersDelete);
 
 router.patch('/', usersPatch);
 
