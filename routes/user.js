@@ -1,6 +1,8 @@
 const {Router} = require('express');
 
 const {validarJWT} = require('../middlewares/validar-jwt');
+const { isAdmin } = require('../middlewares/validar-rol');
+
 const { usersGet,
         usersPost,
         usersPut,
@@ -19,7 +21,8 @@ router.put('/',usersPut);
 router.post('/',usersPost);
 
 router.delete('/:id',[
-    validarJWT
+    validarJWT,
+    isAdmin,
 ],usersDelete);
 
 router.patch('/', usersPatch);
