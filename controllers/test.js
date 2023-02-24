@@ -16,10 +16,9 @@ const testsGet = async(req = request, res = response) => {
 
 const testsPost = async(req, res = response) => {
     
-    const { usuario, date, tipo, intentos, emotion } = req.body;
-    const test = new Test ({ usuario, date, tipo, intentos, emotion } );
+    const { usuario, date, tipo, intentos, emotion, resultado } = req.body;
+    const test = new Test ({ usuario, date, tipo, intentos, emotion, resultado } );
     
-
 
 
     // Guardar en BD
@@ -32,17 +31,7 @@ const testsPost = async(req, res = response) => {
 
 const testsPut = async(req, res = response) => {
 
-    const { id } = req.params;
-    const { _id, password, google, mail, ...resto } = req.body;
-
-    if ( password ) {
-        // Encriptar la contraseña
-        const salt = bcryptjs.genSaltSync();
-        resto.password = bcryptjs.hashSync( password, salt );
-    }
-
-    const test = await Usuario.findByIdAndUpdate( id, resto );
-
+  
     res.json(test);
 }
 

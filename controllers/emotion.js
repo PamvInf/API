@@ -5,7 +5,7 @@ const Emotion = require('../models/emotions');
 
 
 const emotionsGet = async(req,res = response ) => {
-    var num = parseInt(Math.random() * (5 - 0) +0);
+    var num = parseInt(Math.random() * (4 - 0) +0);
     
     try {
         var data =  await db.collection('emotions').find({}).toArray();

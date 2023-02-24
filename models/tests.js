@@ -23,6 +23,12 @@ const TestSchema = Schema({
         type: Number,
         required:[true, 'Debe haber realizado algun intento']
     },
+    resultado:{
+        type: String,
+        enum:["WIN","LOSE"],
+        required: true
+
+    },
     emotion:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Emotion'

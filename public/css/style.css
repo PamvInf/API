@@ -8,3 +8,13 @@ body{
     align-items: center;
 }
 
+video {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+#titulo{
+    text-align: center;
+}
+

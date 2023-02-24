@@ -42,70 +42,48 @@ Promise.all([
 
 bontonIntento.addEventListener('click', async ()=>{
     count++;
-    const canvas = faceapi.createCanvasFromMedia(video);
-    //document.body.append(canvas);
-    const displaySize = {width: video.width, height: video.height};
-    faceapi.matchDimensions(canvas, displaySize);
-   // setInterval(async ()=>{
-        const detections = await faceapi.detectAllFaces(video,new 
-        faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
-        .withFaceExpressions();
-        const resizedDetections = faceapi.resizeResults(detections,
-        displaySize);
-        canvas.getContext('2d').clearRect(0,0, canvas.width, canvas.height);
+    var resu ="LOSE";
+    if (count<=5) {
         
-        //faceapi.draw.drawDetections(canvas,resizedDetections);
-        //faceapi.draw.drawFaceLandmarks(canvas,resizedDetections);
-        //faceapi.draw.drawFaceExpressions(canvas,resizedDetections);
-        
-        
-        
-        
-        result = await getExpression(detections);
-        console.log(result +'y lo que tienes que sacar es: '+ testEmocion);
-        console.log('intento numero: ' + count);
+    
+       const canvas = faceapi.createCanvasFromMedia(video);
+       //document.body.append(canvas);
+       const displaySize = {width: video.width, height: video.height};
+       faceapi.matchDimensions(canvas, displaySize);
+      // setInterval(async ()=>{
+           const detections = await faceapi.detectAllFaces(video,new 
+           faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
+           .withFaceExpressions();
+           const resizedDetections = faceapi.resizeResults(detections,
+           displaySize);
+           canvas.getContext('2d').clearRect(0,0, canvas.width, canvas.height);
+           
+           //faceapi.draw.drawDetections(canvas,resizedDetections);
+           //faceapi.draw.drawFaceLandmarks(canvas,resizedDetections);
+           //faceapi.draw.drawFaceExpressions(canvas,resizedDetections);
+           
+           
+           
+           
+           result = await getExpression(detections);
+           console.log(result +'y lo que tienes que sacar es: '+ testEmocion);
+           console.log('intento numero: ' + count);
 
-        
-        
-          
-    //});
-   
 
-/*
-video.addEventListener('play', ()=>{
-    const canvas = faceapi.createCanvasFromMedia(video);
-    document.body.append(canvas);
-    const displaySize = {width: video.width, height: video.height};
-    faceapi.matchDimensions(canvas, displaySize);
-    setInterval(async ()=>{
-        const detections = await faceapi.detectAllFaces(video,new 
-        faceapi.TinyFaceDetectorOptions()).withFaceLandmarks()
-        .withFaceExpressions();
-        const resizedDetections = faceapi.resizeResults(detections,
-        displaySize);
-        canvas.getContext('2d').clearRect(0,0, canvas.width, canvas.height);
-        
-        faceapi.draw.drawDetections(canvas,resizedDetections);
-        faceapi.draw.drawFaceLandmarks(canvas,resizedDetections);
-        faceapi.draw.drawFaceExpressions(canvas,resizedDetections);
-        
-        
-        
-        
-        const result = await getExpression(detections);
-        console.log(result);
-        await postUser();
-          
-    },3000);
-*/
-    if(result==testEmocion){
-        console.log('Acertado!');
-        console.log(emotionId);
+       if(result==testEmocion){
+            resu="WIN"
+            console.log('Acertado!');
+            console.log(emotionId);
 
-        await postTest();
+            return postTest(resu);
+        }
 
+    }else if(count>=5){
+        console.log('Demasiados intentos');
+        return postTest(resu);
     }
-        
+    
+
 });
 
 
@@ -120,7 +98,6 @@ video.addEventListener('play', ()=>{
                     res= array[i];
                 }
             }
-
         }
         return res[0];
     }
@@ -130,7 +107,7 @@ video.addEventListener('play', ()=>{
 
 
 
-async function postTest(){
+async function postTest(resu){
     var res = await fetch('http://127.0.0.1:8080/api/tests',
     {
         method: 'POST',
@@ -141,21 +118,24 @@ async function postTest(){
             usuario: "637b48e17e5e4cf71672c91b",
             tipo: "RECONGNIZE",
             intentos: count,
-            emotion: emotionId
+            emotion: emotionId,
+            resultado: resu
 
         })
-
-
     })
     console.log(res);
-    location.reload();
+    window.location.reload();
 };
+
+
 
 
 async function getEmotion() { //Requerimos de una emocion para poner en el titulo
     var nuevoH1 = document.createElement('h1');
+    var arrFra= ['Vamos a poner cara de:', 'Intentamos ponernos:', 'Ahora cara de:']
 
-     var res =await fetch('http://127.0.0.1:8080/api/emotions', 
+
+    var res =await fetch('http://127.0.0.1:8080/api/emotions', 
         {
             method: 'GET',
             headers:{
@@ -164,30 +144,34 @@ async function getEmotion() { //Requerimos de una emocion para poner en el titul
             
         }
         );
+
+
     var respuesta =await res.json();
+
     switch (respuesta.dataName) {       //Traducimos la emocion, a lo "sucio"
         case 'happy':
-            nuevoH1.innerHTML ="Feliz";
+            nuevoH1.innerHTML =`${arrFra[parseInt(Math.random()*(2-0))]} Feliz` ;
             break;
         case 'angry':
-            nuevoH1.innerHTML = "Enfadado";
+            nuevoH1.innerHTML = `${arrFra[parseInt(Math.random()*(2-0))]} Enfadado`;
             break;
-        case 'surprise':
-            nuevoH1.innerHTML = "Sorprendido";
+        case 'surprised':
+            nuevoH1.innerHTML = `${arrFra[parseInt(Math.random()*(2-0))]} Sorprendido`;
             break;
         case 'sad':
-            nuevoH1.innerHTML = "Triste";
+            nuevoH1.innerHTML = `${arrFra[parseInt(Math.random()*(2-0))]} Triste`;
             break;
         case 'neutral':
-            nuevoH1.innerHTML = "Normal";
+            nuevoH1.innerHTML = "Normal" + arrFra[ Math.random() * (2 - 0) +0];
             break;    
         default:
             break;
     }
+
     respuesta.dataName ;
     nuevoH1.id='testEmocion';
-    nuevoH1.setAttribute('value', respuesta.data)
-    document.querySelector('#titulo').appendChild(nuevoH1); 
+    nuevoH1.setAttribute('value', respuesta.data);
+    document.querySelector('#titulo').appendChild(nuevoH1);
     testEmocion = respuesta.dataName;
     emotionId = respuesta.dataId;
     console.log(respuesta.dataId);
