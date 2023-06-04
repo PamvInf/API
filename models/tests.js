@@ -31,7 +31,8 @@ const TestSchema = Schema({
     },
     emotion:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Emotion'
+        ref: 'Emotion',
+        required:true
         }
 });
 

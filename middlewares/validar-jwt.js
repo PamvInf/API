@@ -16,7 +16,7 @@ const validarJWT = async (req = request, res =  response, next) =>{
     }
 
     try{
-
+        
 
         const {uid} = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
 

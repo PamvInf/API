@@ -11,6 +11,8 @@ const dbConnection =async()=>{
             useNewUrlParser: true
         })
 
+
+        
         console.log('BD online');
         
     } catch (error) {
@@ -20,7 +22,9 @@ const dbConnection =async()=>{
     }
 
 
+
 }
+
 
 
 module.exports ={

@@ -13,6 +13,7 @@ class Server{
         this.testPath       = '/api/tests';
         this.pictogramaPath = '/api/pictogramas';
         this.authPath       = '/api/auth';
+        this.situacionPath  = '/api/situaciones';
 
 
         // Conectar a la DB
@@ -56,6 +57,7 @@ class Server{
         this.app.use(this.emotionPath, require('../routes/emotion'));
         this.app.use(this.testPath, require('../routes/test'));
         this.app.use(this.pictogramaPath, require('../routes/pictograma'));
+        this.app.use(this.situacionPath, require('../routes/situacion'));
 
 
     }

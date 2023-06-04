@@ -4,18 +4,34 @@ const bcryptjs = require('bcryptjs');
 const Usuario = require('../models/users');
 const  jwt  = require('jsonwebtoken');
 
-
-const usersGet = (req,res = response ) => {
-    
-    res.json({
-        msg: 'get API - Controller'
-    });
-}
+const usersGet = async (req, res = response) => {
+    try {
+      const { id } = req.query; // Obtiene el ID del usuario desde los parámetros de consulta de la URL
+      const usuario = await Usuario.findById(id); // Busca el usuario por su ID en la base de datos
+  
+      if (!usuario) {
+        return res.status(404).json({
+          msg: 'Usuario no encontrado',
+        });
+      }
+  
+      // Si el usuario existe, se envían todos los datos del usuario
+      res.json({
+        usuario,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        msg: 'Error en el servidor',
+      });
+    }
+  };
+  
 
 const usersPost = async (req,res = response ) => {
 
-    const {nombre, mail, password, role} = req.body;
-    const usuario = new Usuario({nombre, mail, password, role});
+    const {nombre, mail, password, role,edad} = req.body;
+    const usuario = new Usuario({nombre, mail, password, role,edad});
 
     //Si quermos recoger el parametro pasado por URL seguimos lo dicho en routes
     //const id = req.params.id; (o el nombre que sea)

@@ -27,6 +27,11 @@ const UsuarioSchema = Schema({
         type: Boolean,
         default: true
     },
+    edad:{
+        type: Number,
+        required: [true, 'Debe insertar edad']
+    }
+    ,
     google: {
         type: Boolean,
         default: false
